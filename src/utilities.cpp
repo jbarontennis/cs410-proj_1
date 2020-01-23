@@ -49,7 +49,27 @@ int saveData(const char* filename){
 
 }
 void sortData(SORT_ORDER mySortOrder){
-
+	int size = stats.size();
+	int countArray[size];
+	vector<process_stats> tmp;
+	for(int i = 0;i<size;i++){
+		tmp.push_back(stats[i]);
+		countArray[i] = 0;
+	}
+if(mySortOrder == START_TIME){
+	for(int i = 0;i<size-1;i++){
+		for(int j = i+1;j<size;j++){
+			if(stats[i].start_time > stats[j].start_time){
+				countArray[i]++;
+			}else{
+				countArray[j]++;
+			}
+		}
+	}
+}
+for(int i = 0;i<size;i++){
+	stats[countArray[i]] = tmp[i];
+}
 }
 process_stats getNext(){
 process_stats tmp= stats[elementCounter];
