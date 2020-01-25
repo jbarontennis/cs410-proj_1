@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/fileio.cpp \
+../src/main.cpp \
 ../src/utilities.cpp 
 
 OBJS += \
 ./src/fileio.o \
+./src/main.o \
 ./src/utilities.o 
 
 CPP_DEPS += \
 ./src/fileio.d \
+./src/main.d \
 ./src/utilities.d 
 
 

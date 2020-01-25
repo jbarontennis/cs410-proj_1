@@ -2,7 +2,7 @@
  * utilities.cpp
  *
  *  Created on: Jan 19, 2020
- *      Author: james
+ *      Author: James Baron
  */
 #include <vector>
 #include <iostream>
@@ -52,9 +52,11 @@ int saveData(const char* filename){
 		if(myFile.is_open()){
 			for(int i = 0;i<stats.size();i++){
 				process_stats tmp = stats[i];
-			myFile<<tmp.process_number + ",";
-			myFile<<tmp.start_time+ ",";
-			myFile<<tmp.cpu_time;
+			myFile<<tmp.process_number;
+			myFile<<",";
+			myFile<<tmp.start_time;
+			myFile<<",";
+			myFile<<tmp.cpu_time<<endl;
 			}
 		}else{
 			return COULD_NOT_OPEN_FILE;
