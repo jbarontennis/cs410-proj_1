@@ -46,8 +46,25 @@ return COULD_NOT_OPEN_FILE;
 }
 }
 int saveData(const char* filename){
+	ofstream myFile;
+		try{
+		myFile.open(filename,ios::trunc);
+		if(myFile.is_open()){
+			for(int i = 0;i<stats.size();i++){
+				process_stats tmp = stats[i];
+			myFile<<tmp.process_number + ",";
+			myFile<<tmp.start_time+ ",";
+			myFile<<tmp.cpu_time;
+			}
+		}else{
+			return COULD_NOT_OPEN_FILE;
+		}
+		}catch(exception& e){
+			return COULD_NOT_OPEN_FILE;
+		}
+		return SUCCESS;
+	}
 
-}
 void sortData(SORT_ORDER mySortOrder){
 	int size = stats.size();
 	int countArray[size];
@@ -67,14 +84,34 @@ if(mySortOrder == START_TIME){
 		}
 	}
 }
+else if(mySortOrder == CPU_TIME){
+	for(int i = 0;i<size-1;i++){
+		for(int j = i+1;j<size;j++){
+			if(stats[i].cpu_time > stats[j].cpu_time){
+				countArray[i]++;
+			}else{
+				countArray[j]++;
+			}
+		}
+	}
+}
+else if(mySortOrder == PROCESS_NUMBER){
+	for(int i = 0;i<size-1;i++){
+		for(int j = i+1;j<size;j++){
+			if(stats[i].process_number > stats[j].process_number){
+				countArray[i]++;
+			}else{
+				countArray[j]++;
+			}
+		}
+	}
+}
 for(int i = 0;i<size;i++){
 	stats[countArray[i]] = tmp[i];
 }
 }
 process_stats getNext(){
 process_stats tmp= stats[elementCounter];
-elementCounter++;
-stats.pop_back();
 return tmp;
 	}
 
