@@ -12,110 +12,105 @@
 using namespace std;
 vector<process_stats> stats;
 int elementCounter = 0;
-int loadData(const char* filename){
-fstream myFile;
-string line;
+int loadData(const char *filename) {
+	fstream myFile;
+	string line;
 
+	const std::string file = filename;
 
-const std::string file = filename;
-
-try{
-	myFile.open(filename, ios::in);
-	if(myFile.is_open()){
-				while(myFile.peek() != EOF){
-					getline(myFile,line);
-					stringstream ss(line);
-					vector<std::string> tmphold;
-					while(getline(ss,line,',')){
-						tmphold.push_back(line);
+	try {
+		myFile.open(filename, ios::in);
+		if (myFile.is_open()) {
+			while (myFile.peek() != EOF) {
+				getline(myFile, line);
+				stringstream ss(line);
+				vector<std::string> tmphold;
+				while (getline(ss, line, ',')) {
+					tmphold.push_back(line);
 				}
-					process_stats tmpstat;
-					int i1 = stoi(tmphold[0]);
-					int i2 = stoi(tmphold[1]);
-					int i3 = stoi(tmphold[2]);
-					tmpstat.process_number = i1;
-					tmpstat.start_time = i2;
-					tmpstat.cpu_time = i3;
-					stats.push_back(tmpstat);
-				}
-				return SUCCESS;
-	}
-return COULD_NOT_OPEN_FILE;
-}catch(exception& e){
-return COULD_NOT_OPEN_FILE;
-}
-}
-int saveData(const char* filename){
-	ofstream myFile;
-		try{
-		myFile.open(filename,ios::trunc);
-		if(myFile.is_open()){
-			for(int i = 0;i<stats.size();i++){
-				process_stats tmp = stats[i];
-			myFile<<tmp.process_number;
-			myFile<<",";
-			myFile<<tmp.start_time;
-			myFile<<",";
-			myFile<<tmp.cpu_time<<endl;
+				process_stats tmpstat;
+				int convertPn = stoi(tmphold[0]);
+				int convertSt = stoi(tmphold[1]);
+				int convertCt = stoi(tmphold[2]);
+				tmpstat.process_number = convertPn;
+				tmpstat.start_time = convertSt;
+				tmpstat.cpu_time = convertCt;
+				stats.push_back(tmpstat);
 			}
-		}else{
-			return COULD_NOT_OPEN_FILE;
+			return SUCCESS;
 		}
-		}catch(exception& e){
-			return COULD_NOT_OPEN_FILE;
-		}
-		return SUCCESS;
+		return COULD_NOT_OPEN_FILE;
+	} catch (exception &e) {
+		return COULD_NOT_OPEN_FILE;
 	}
+}
+int saveData(const char *filename) {
+	ofstream myFile;
+	try {
+		myFile.open(filename, ios::trunc);
+		if (myFile.is_open()) {
+			for (int i = 0; i < stats.size(); i++) {
+				process_stats tmp = stats[i];
+				myFile << tmp.process_number;
+				myFile << ",";
+				myFile << tmp.start_time;
+				myFile << ",";
+				myFile << tmp.cpu_time << endl;
+			}
+		} else {
+			return COULD_NOT_OPEN_FILE;
+		}
+	} catch (exception &e) {
+		return COULD_NOT_OPEN_FILE;
+	}
+	return SUCCESS;
+}
 
-void sortData(SORT_ORDER mySortOrder){
+void sortData(SORT_ORDER mySortOrder) {
 	int size = stats.size();
 	int countArray[size];
 	vector<process_stats> tmp;
-	for(int i = 0;i<size;i++){
+	for (int i = 0; i < size; i++) {
 		tmp.push_back(stats[i]);
 		countArray[i] = 0;
 	}
-if(mySortOrder == START_TIME){
-	for(int i = 0;i<size-1;i++){
-		for(int j = i+1;j<size;j++){
-			if(stats[i].start_time > stats[j].start_time){
-				countArray[i]++;
-			}else{
-				countArray[j]++;
+	if (mySortOrder == START_TIME) {
+		for (int i = 0; i < size - 1; i++) {
+			for (int j = i + 1; j < size; j++) {
+				if (stats[i].start_time > stats[j].start_time) {
+					countArray[i]++;
+				} else {
+					countArray[j]++;
+				}
+			}
+		}
+	} else if (mySortOrder == CPU_TIME) {
+		for (int i = 0; i < size - 1; i++) {
+			for (int j = i + 1; j < size; j++) {
+				if (stats[i].cpu_time > stats[j].cpu_time) {
+					countArray[i]++;
+				} else {
+					countArray[j]++;
+				}
+			}
+		}
+	} else if (mySortOrder == PROCESS_NUMBER) {
+		for (int i = 0; i < size - 1; i++) {
+			for (int j = i + 1; j < size; j++) {
+				if (stats[i].process_number > stats[j].process_number) {
+					countArray[i]++;
+				} else {
+					countArray[j]++;
+				}
 			}
 		}
 	}
-}
-else if(mySortOrder == CPU_TIME){
-	for(int i = 0;i<size-1;i++){
-		for(int j = i+1;j<size;j++){
-			if(stats[i].cpu_time > stats[j].cpu_time){
-				countArray[i]++;
-			}else{
-				countArray[j]++;
-			}
-		}
+	for (int i = 0; i < size; i++) {
+		stats[countArray[i]] = tmp[i];
 	}
 }
-else if(mySortOrder == PROCESS_NUMBER){
-	for(int i = 0;i<size-1;i++){
-		for(int j = i+1;j<size;j++){
-			if(stats[i].process_number > stats[j].process_number){
-				countArray[i]++;
-			}else{
-				countArray[j]++;
-			}
-		}
-	}
+process_stats getNext() {
+	process_stats tmp = stats[elementCounter];
+	return tmp;
 }
-for(int i = 0;i<size;i++){
-	stats[countArray[i]] = tmp[i];
-}
-}
-process_stats getNext(){
-process_stats tmp= stats[elementCounter];
-return tmp;
-	}
-
-
 

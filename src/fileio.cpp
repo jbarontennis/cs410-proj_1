@@ -53,10 +53,12 @@ int main() {
 		cout<<"Success 3"<<endl;
 
 	//sort the data
+	//start time
 	sortData(START_TIME);
 
 	//get the next one in line
 	myStats = getNext();
+	//10,10,200
 	if (myStats.process_number!=10 || myStats.start_time !=10 ||myStats.cpu_time !=200 ){
 		total_points =total_points-20;
 		cout<<"-20 failed getnext after sort, expected 10,10,200 got "<<std::to_string(myStats.process_number) <<","<<std::to_string(myStats.start_time)<<","<<std::to_string(myStats.cpu_time)<<endl;
